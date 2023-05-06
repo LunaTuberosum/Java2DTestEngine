@@ -110,6 +110,15 @@ public class Entity {
     }
 
     public void dropItem(Entity dropedItem) {
+
+        for (int i = 0; i < gp.obj.length; i++) {
+            if (gp.obj[i] == null) {
+                gp.obj[i] = dropedItem;
+                gp.obj[i].worldX = worldX;
+                gp.obj[i].worldY = worldY;
+                break;
+            }
+        }
     }
 
     public void update() {
