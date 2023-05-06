@@ -71,6 +71,7 @@ public class Entity {
 
     // ITEM ATTRIBUTES
 
+    public int value;
     public int attackValue;
     public int defenceValue;
     public String description = "";
@@ -86,6 +87,7 @@ public class Entity {
     public final int type_axe = 4;
     public final int type_shield = 5;
     public final int type_consumable = 6;
+    public final int type_pickupOnly = 7;
 
     public Entity(GamePanel gp) {
 
@@ -99,30 +101,15 @@ public class Entity {
     }
 
     public void speak() {
-
-        if (dialogues[dialogueIndex] == null) {
-            dialogueIndex = 0;
-        }
-        gp.ui.currentDialogue = dialogues[dialogueIndex];
-        dialogueIndex++;
-
-        switch (gp.player.direction) {
-            case "up":
-                direction = "down";
-                break;
-            case "down":
-                direction = "up";
-                break;
-            case "left":
-                direction = "right";
-                break;
-            case "right":
-                direction = "left";
-                break;
-        }
     }
 
     public void use(Entity entity) {
+    }
+
+    public void checkDrop() {
+    }
+
+    public void dropItem(Entity dropedItem) {
     }
 
     public void update() {
@@ -296,8 +283,7 @@ public class Entity {
                 dyingAnimation(g2);
             }
 
-            g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
-
+            g2.drawImage(image, screenX, screenY, null);
             changeAlpha(g2, 1f);
 
         }
