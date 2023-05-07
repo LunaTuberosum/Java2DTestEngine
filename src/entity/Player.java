@@ -182,7 +182,7 @@ public class Player extends Entity {
 
             // CHECK INTERACTIVE TILE COLLISION
 
-            int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
+            gp.cChecker.checkEntity(this, gp.iTile);
 
             // CHECK EVENT COLLISION
 
@@ -420,6 +420,9 @@ public class Player extends Entity {
             gp.iTile[index].playSE();
             gp.iTile[index].life--;
             gp.iTile[index].invincible = true;
+
+            // GENERATE PARTICLE
+            generateParticle(gp.iTile[index], gp.iTile[index]);
 
             if (gp.iTile[index].life == 0) {
                 gp.iTile[index] = gp.iTile[index].getDestroyedForm();
