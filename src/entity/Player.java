@@ -53,15 +53,16 @@ public class Player extends Entity {
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
 
-        speed = 4;
         direction = "down";
+
+        speed = 4;
 
         // PLAYER STATUS
 
         level = 1;
         maxLife = 6;
-        life = maxLife;
         maxMana = 4;
+        life = maxLife;
         mana = maxMana;
         strength = 1;
         dexterity = 1;
@@ -75,8 +76,24 @@ public class Player extends Entity {
         defence = getDefence();
     }
 
+    public void setDefaltPositions() {
+
+        worldX = gp.tileSize * 23;
+        worldY = gp.tileSize * 21;
+
+        direction = "down";
+    }
+
+    public void restoreLifeandMana() {
+
+        life = maxLife;
+        mana = maxMana;
+        invincible = false;
+    }
+
     public void setItems() {
 
+        inventory.clear();
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(new OBJ_Key(gp));
@@ -225,6 +242,10 @@ public class Player extends Entity {
                     spriteNum = 1;
                 }
                 spriteCounter = 0;
+            }
+
+            if (life <= 0) {
+                gp.gameState = gp.gameOverState;
             }
 
         }
