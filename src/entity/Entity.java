@@ -111,11 +111,11 @@ public class Entity {
 
     public void dropItem(Entity dropedItem) {
 
-        for (int i = 0; i < gp.obj.length; i++) {
-            if (gp.obj[i] == null) {
-                gp.obj[i] = dropedItem;
-                gp.obj[i].worldX = worldX;
-                gp.obj[i].worldY = worldY;
+        for (int i = 0; i < gp.obj[1].length; i++) {
+            if (gp.obj[gp.currentMap][i] == null) {
+                gp.obj[gp.currentMap][i] = dropedItem;
+                gp.obj[gp.currentMap][i].worldX = worldX;
+                gp.obj[gp.currentMap][i].worldY = worldY;
                 break;
             }
         }
