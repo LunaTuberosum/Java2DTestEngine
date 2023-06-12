@@ -5,8 +5,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -87,6 +85,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int characterState = 4;
     public final int optionsState = 5;
     public final int gameOverState = 6;
+    public final int transitionState = 7;
+    public final int tradeState = 8;
 
     public GamePanel() {
 
@@ -139,16 +139,20 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setFullScreen() {
 
-        // GET LOCAL SCREEN DEVICE
+        // // GET LOCAL SCREEN DEVICE
 
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice gd = ge.getDefaultScreenDevice();
-        gd.setFullScreenWindow(Main.window);
+        // GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        // GraphicsDevice gd = ge.getDefaultScreenDevice();
+        // gd.setFullScreenWindow(Main.window);
 
-        // GET FULL SCREEN WIDTH AND HEIGHT
+        // // GET FULL SCREEN WIDTH AND HEIGHT
 
-        double width = Main.window.getWidth();
-        double height = Main.window.getHeight();
+        // screenWidth2 = Main.window.getWidth();
+        // screenHeight2 = Main.window.getHeight();
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();
         Main.window.setExtendedState(JFrame.MAXIMIZED_BOTH);
         screenWidth2 = (int) width;
         screenHeight2 = (int) height;

@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -71,11 +72,14 @@ public class Entity {
 
     // ITEM ATTRIBUTES
 
+    public ArrayList<Entity> inventory = new ArrayList<>();
+    public final int maxInventorySize = 20;
     public int value;
     public int attackValue;
     public int defenceValue;
     public String description = "";
     public int useCost;
+    public int price;
 
     // TYPE
 
@@ -101,6 +105,12 @@ public class Entity {
     }
 
     public void speak() {
+
+        if (dialogues[dialogueIndex] == null) {
+            dialogueIndex = 0;
+        }
+        gp.ui.currentDialogue = dialogues[dialogueIndex];
+        dialogueIndex++;
     }
 
     public void use(Entity entity) {
@@ -197,7 +207,7 @@ public class Entity {
 
         spriteCounter++;
 
-        if (spriteCounter > 12) {
+        if (spriteCounter > 24) {
             if (spriteNum == 1) {
                 spriteNum = 2;
             } else if (spriteNum == 2) {

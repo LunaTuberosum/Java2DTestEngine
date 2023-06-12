@@ -10,7 +10,6 @@ import object.OBJ_Sword_Normal;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class Player extends Entity {
 
@@ -20,9 +19,6 @@ public class Player extends Entity {
     public final int screenY;
 
     public boolean attackCanceled = false;
-
-    public ArrayList<Entity> inventory = new ArrayList<>();
-    public final int maxInventorySize = 20;
 
     public Player(GamePanel gp, KeyHandler keyH) {
 
@@ -68,7 +64,7 @@ public class Player extends Entity {
         dexterity = 1;
         exp = 0;
         nextLevelExp = 5;
-        coin = 0;
+        coin = 500;
         currentWeapon = new OBJ_Sword_Normal(gp);
         currentShield = new OBJ_Shield_Wood(gp);
         projectile = new OBJ_Fireball(gp);
@@ -438,19 +434,19 @@ public class Player extends Entity {
 
     public void damageInteractiveTile(int index) {
 
-        if (index != 999 && gp.iTile[gp.characterState][index].destructable
-                && gp.iTile[gp.characterState][index].isCorrectItem(this)
-                && !gp.iTile[gp.characterState][index].invincible) {
+        if (index != 999 && gp.iTile[gp.currentMap][index].destructable
+                && gp.iTile[gp.currentMap][index].isCorrectItem(this)
+                && !gp.iTile[gp.currentMap][index].invincible) {
 
-            gp.iTile[gp.characterState][index].playSE();
-            gp.iTile[gp.characterState][index].life--;
-            gp.iTile[gp.characterState][index].invincible = true;
+            gp.iTile[gp.currentMap][index].playSE();
+            gp.iTile[gp.currentMap][index].life--;
+            gp.iTile[gp.currentMap][index].invincible = true;
 
             // GENERATE PARTICLE
-            generateParticle(gp.iTile[gp.characterState][index], gp.iTile[gp.characterState][index]);
+            generateParticle(gp.iTile[gp.currentMap][index], gp.iTile[gp.currentMap][index]);
 
-            if (gp.iTile[gp.characterState][index].life == 0) {
-                gp.iTile[gp.characterState][index] = gp.iTile[gp.characterState][index].getDestroyedForm();
+            if (gp.iTile[gp.currentMap][index].life == 0) {
+                gp.iTile[gp.currentMap][index] = gp.iTile[gp.currentMap][index].getDestroyedForm();
 
             }
         }
@@ -477,7 +473,7 @@ public class Player extends Entity {
 
     public void selectItem() {
 
-        int itemIndex = gp.ui.getItemIndexOnSlot();
+        int itemIndex = gp.ui.getItemIndexOnSlot(gp.ui.playerSlotCol, gp.ui.playerSlotRow);
 
         if (itemIndex < inventory.size()) {
 
