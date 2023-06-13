@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.Rectangle;
 import java.util.Random;
 
 import main.GamePanel;
@@ -12,6 +13,14 @@ public class NPC_OldMan extends Entity {
 
         direction = "down";
         speed = 1;
+
+        solidArea = new Rectangle();
+        solidArea.x = 8;
+        solidArea.y = 16;
+        solidAreaDefultX = solidArea.x;
+        solidAreaDefultY = solidArea.y;
+        solidArea.width = 30;
+        solidArea.height = 30;
 
         getImage();
         setDialogue();
@@ -42,24 +51,35 @@ public class NPC_OldMan extends Entity {
 
     public void setAction() {
 
-        actionLockCounter++;
+        if (onPath) {
 
-        if (actionLockCounter == 120) {
+            // int goalCol = 12;
+            // int goalRow = 9;
+            int goalCol = (gp.player.worldX + gp.player.solidArea.x) / gp.tileSize;
+            int goalRow = (gp.player.worldY + gp.player.solidArea.y) / gp.tileSize;
 
-            Random random = new Random();
-            int i = random.nextInt(100) + 1;
+            searchPath(goalCol, goalRow);
 
-            if (i <= 25) {
-                direction = "up";
-            } else if (i <= 50) {
-                direction = "down";
-            } else if (i <= 75) {
-                direction = "left";
-            } else if (i <= 100) {
-                direction = "right";
+        } else {
+            actionLockCounter++;
+
+            if (actionLockCounter == 120) {
+
+                Random random = new Random();
+                int i = random.nextInt(100) + 1;
+
+                if (i <= 25) {
+                    direction = "up";
+                } else if (i <= 50) {
+                    direction = "down";
+                } else if (i <= 75) {
+                    direction = "left";
+                } else if (i <= 100) {
+                    direction = "right";
+                }
+
+                actionLockCounter = 0;
             }
-
-            actionLockCounter = 0;
         }
 
     }
@@ -68,20 +88,7 @@ public class NPC_OldMan extends Entity {
 
         super.speak();
 
-        switch (gp.player.direction) {
-            case "up":
-                direction = "down";
-                break;
-            case "down":
-                direction = "up";
-                break;
-            case "left":
-                direction = "right";
-                break;
-            case "right":
-                direction = "left";
-                break;
-        }
+        onPath = true;
     }
 
 }
