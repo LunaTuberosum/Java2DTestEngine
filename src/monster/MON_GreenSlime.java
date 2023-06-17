@@ -22,7 +22,8 @@ public class MON_GreenSlime extends Entity {
         type = type_monster;
 
         name = "Green Slime";
-        speed = 1;
+        defaultSpeed = 1;
+        speed = defaultSpeed;
         maxLife = 4;
         life = maxLife;
         attack = 5;
@@ -95,7 +96,17 @@ public class MON_GreenSlime extends Entity {
 
                 projectile.set(worldX, worldY, direction, true, this);
 
-                gp.projectileList.add(projectile);
+                // CHECK VANCANY
+
+                for (int ii = 0; ii < gp.projectile[1].length; ii++) {
+
+                    if (gp.projectile[gp.currentMap][ii] == null) {
+
+                        gp.projectile[gp.currentMap][ii] = projectile;
+                        break;
+                    }
+                }
+
                 shotAvailableCounter = 0;
             }
 

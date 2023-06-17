@@ -51,7 +51,8 @@ public class Player extends Entity {
 
         direction = "down";
 
-        speed = 4;
+        defaultSpeed = 4;
+        speed = defaultSpeed;
 
         // PLAYER STATUS
 
@@ -257,8 +258,16 @@ public class Player extends Entity {
             // SUBTRACT THE COST (MANA, AMMO, ECT...)
             projectile.subtractResource(this);
 
-            // ADD IT TO THE LIST
-            gp.projectileList.add(projectile);
+            // CHECK VANCANY
+
+            for (int i = 0; i < gp.projectile[1].length; i++) {
+
+                if (gp.projectile[gp.currentMap][i] == null) {
+
+                    gp.projectile[gp.currentMap][i] = projectile;
+                    break;
+                }
+            }
 
             shotAvailableCounter = 0;
 
@@ -322,10 +331,13 @@ public class Player extends Entity {
             solidArea.height = attackArea.height;
 
             int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
-            damageMonster(monsterIndex, this.attack);
+            damageMonster(monsterIndex, this.attack, currentWeapon.knockBackPower);
 
             int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
             damageInteractiveTile(iTileIndex);
+
+            int projectileIndex = gp.cChecker.checkEntity(this, gp.projectile);
+            damageProjectile(projectileIndex);
 
             worldX = currentWorldX;
             worldY = currentWorldY;
@@ -401,13 +413,18 @@ public class Player extends Entity {
         }
     }
 
-    public void damageMonster(int index, int attack) {
+    public void damageMonster(int index, int attack, int knockBackPower) {
 
         if (index != 999) {
 
             if (!gp.monster[gp.currentMap][index].invincible) {
 
                 gp.playSE(5);
+
+                if (knockBackPower > 0) {
+
+                    knockBack(gp.monster[gp.currentMap][index], knockBackPower);
+                }
 
                 int damage = attack - gp.monster[gp.currentMap][index].defence;
                 if (damage < 0) {
@@ -432,6 +449,13 @@ public class Player extends Entity {
         }
     }
 
+    public void knockBack(Entity entity, int knockBackPower) {
+
+        entity.direction = direction;
+        entity.speed += knockBackPower;
+        entity.knockBack = true;
+    }
+
     public void damageInteractiveTile(int index) {
 
         if (index != 999 && gp.iTile[gp.currentMap][index].destructable
@@ -449,6 +473,16 @@ public class Player extends Entity {
                 gp.iTile[gp.currentMap][index] = gp.iTile[gp.currentMap][index].getDestroyedForm();
 
             }
+        }
+    }
+
+    public void damageProjectile(int index) {
+
+        if (index != 999) {
+
+            Entity projectile = gp.projectile[gp.currentMap][index];
+            projectile.alive = false;
+            generateParticle(projectile, projectile);
         }
     }
 

@@ -41,6 +41,7 @@ public class Entity {
     public boolean dying = false;
     public boolean hpBarOn = false;
     public boolean onPath = false;
+    public boolean knockBack = false;
 
     // COUNTER
 
@@ -50,10 +51,12 @@ public class Entity {
     public int shotAvailableCounter = 0;
     public int dyingCounter = 0;
     public int hpBarCounter = 0;
+    public int knockBackCounter = 0;
 
     // CHARACTER ATTIBUTES
 
     public String name;
+    public int defaultSpeed;
     public int speed;
     public int maxLife;
     public int life;
@@ -81,6 +84,7 @@ public class Entity {
     public String description = "";
     public int useCost;
     public int price;
+    public int knockBackPower;
 
     // TYPE
 
@@ -190,24 +194,64 @@ public class Entity {
 
     public void update() {
 
-        setAction();
-        checkCollision();
+        if (knockBack) {
 
-        if (collisionOn == false) {
-            switch (direction) {
-                case "up":
-                    worldY -= speed;
-                    break;
-                case "down":
-                    worldY += speed;
-                    break;
-                case "left":
-                    worldX -= speed;
-                    break;
-                case "right":
-                    worldX += speed;
-                    break;
+            checkCollision();
 
+            if (collisionOn) {
+
+                knockBackCounter = 0;
+                knockBack = false;
+                speed = defaultSpeed;
+
+            } else if (!collisionOn) {
+
+                switch (gp.player.direction) {
+                    case "up":
+                        worldY -= speed;
+                        break;
+                    case "down":
+                        worldY += speed;
+                        break;
+                    case "left":
+                        worldX -= speed;
+                        break;
+                    case "right":
+                        worldX += speed;
+                        break;
+                }
+
+                knockBackCounter++;
+
+                if (knockBackCounter == 10) {
+
+                    knockBackCounter = 0;
+                    knockBack = false;
+                    speed = defaultSpeed;
+                }
+            }
+
+        } else {
+
+            setAction();
+            checkCollision();
+
+            if (collisionOn == false) {
+                switch (direction) {
+                    case "up":
+                        worldY -= speed;
+                        break;
+                    case "down":
+                        worldY += speed;
+                        break;
+                    case "left":
+                        worldX -= speed;
+                        break;
+                    case "right":
+                        worldX += speed;
+                        break;
+
+                }
             }
         }
 
